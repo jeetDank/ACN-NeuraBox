@@ -176,8 +176,9 @@
     transition: all 0.2s ease;
     width: 100%;
     max-width: 120px;
-}
+    white-space: nowrap;
 
+}
 .eventButton:hover {
     background: var(--color-accent-blue-light);
     transform: translateY(-2px);

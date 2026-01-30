@@ -64,7 +64,8 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                     title: potentialTitle,
                     date: '', // Must be filled to be valid
                     location: 'Online/TBA', // Default
-                    type: 'event'
+                    type: 'event',
+                    url: '' // Event page URL
                 };
             } else if (currentEvent) {
                 // Try to find Date
@@ -78,6 +79,14 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                 // Try to find Location
                 else if (line.toLowerCase().includes('location:')) {
                     currentEvent.location = line.split(/location:/i)[1].trim();
+                }
+                // Try to find Learn More URL
+                else if (line.toLowerCase().includes('learn more:')) {
+                    // Extract URL from markdown link format: [text](url)
+                    const urlMatch = line.match(/\[.*?\]\((https?:\/\/[^)]+)\)/);
+                    if (urlMatch) {
+                        currentEvent.url = urlMatch[1];
+                    }
                 }
             }
         });
@@ -97,73 +106,81 @@ export default function ChatMessage({ message, onSuggestionClick }) {
         return (
 
             <>
-            <div className={styles.eventsContainer}>
-                <p className={styles.eventsIntro}>Here are the upcoming events:</p>
-                {extractedEvents.map((event) => (
-                    <div
-                        key={event.id}
-                        className={styles.eventCard}
-                        style={{
-                            background: themeConfig.card.bg,
-                            border: `1px solid ${themeConfig.card.border}`,
-                            color: themeConfig.card.text,
-                        }}
-                    >
-                        <h4 className={styles.eventTitle} style={{ color: themeConfig.card.text }}>
-                            {event.title}
-                        </h4>
-                        <div className={styles.eventMeta} style={{ color: themeConfig.card.textSecondary }}>
-                            <div className={styles.eventDate}>
-                                <Calendar size={14} />
-                                <span>
-                                    {event.date || 'Date TBA'}
-                                    {event.time ? ` | ${event.time}` : ''}
-                                </span>
-                            </div>
-                            <div className={styles.eventLocation}>
-                                <MapPin size={14} />
-                                <span>{event.location}</span>
-                            </div>
-                        </div>
-                        <button
-                            className={styles.eventButton}
+                <div className={styles.eventsContainer}>
+                    <p className={styles.eventsIntro}>Here are the upcoming events:</p>
+                    {extractedEvents.map((event) => (
+                        <div
+                            key={event.id}
+                            className={styles.eventCard}
                             style={{
-                                background: themeConfig.button.primary.bg,
-                                color: themeConfig.button.primary.text,
+                                background: themeConfig.card.bg,
+                                border: `1px solid ${themeConfig.card.border}`,
+                                color: themeConfig.card.text,
                             }}
                         >
-                            {event.title.toLowerCase().includes('webinar') ? 'Register' : 'Learn More'}
-                        </button>
-                    </div>
-                ))}
-            </div>
-            <div className={styles.suggestionsWrapper}>
-                                <AnswerSuggestions 
-                                    userQuery={message.userQuery || message.text}
-                                    answerText={message.text}
-                                    intent={message.intent || 'general'}
-                                    onSuggestionClick={onSuggestionClick}
-                                    isEventResponse={hasEvents}
-                                />
+                            <h4 className={styles.eventTitle} style={{ color: themeConfig.card.text }}>
+                                {event.title}
+                            </h4>
+                            <div className={styles.eventMeta} style={{ color: themeConfig.card.textSecondary }}>
+                                <div className={styles.eventDate}>
+                                    <Calendar size={14} />
+                                    <span>
+                                        {event.date || 'Date TBA'}
+                                        {event.time ? ` | ${event.time}` : ''}
+                                    </span>
+                                </div>
+                                <div className={styles.eventLocation}>
+                                    <MapPin size={14} />
+                                    <span>{event.location}</span>
+                                </div>
                             </div>
-            
-            </>
-            
+                            <a
+                                href={event.url || 'https://www.appliedclientnetwork.org/events'}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.eventButton}
+                                style={{
+                                    background: themeConfig.button.primary.bg,
+                                    color: themeConfig.button.primary.text,
+                                    textDecoration: 'none',
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                }}
+                            >
+                                {event.title.toLowerCase().includes('webinar') ? 'Register' : 'Learn More'}
+                                <ExternalLink size={14} />
+                            </a>
+                        </div>
+                    ))}
+                </div>
+                <div className={styles.suggestionsWrapper}>
+                    <AnswerSuggestions
+                        userQuery={message.userQuery || message.text}
+                        answerText={message.text}
+                        intent={message.intent || 'general'}
+                        onSuggestionClick={onSuggestionClick}
+                        isEventResponse={hasEvents}
+                    />
+                </div>
 
-           
-                                             
-                                            
-                                        
+            </>
+
+
+
+
+
+
         );
     };
 
     return (
-        <div className={`${styles.messageWrapper} ${isUser ? styles.userMessage : hasEvents ? styles.aiMsgUpdated : styles.aiMessage }`}>
+        <div className={`${styles.messageWrapper} ${isUser ? styles.userMessage : hasEvents ? styles.aiMsgUpdated : styles.aiMessage}`}>
             {/* Avatar */}
             {!isUser && (
                 <div className={styles.avatar} style={{ color: themeConfig.accent.purple }}>
                     {/* <Bot size={18} /> */}
-                    <img  src="/images/logo_text.png" alt="" />
+                    <img src="/images/logo_text.png" alt="" />
                 </div>
             )}
 
@@ -182,16 +199,16 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                 ) : (
                     <>
 
-                    {hasEvents ? (
+                        {hasEvents ? (
 
-                                        renderEventCards()
-                                       
+                            renderEventCards()
 
-                                ) : (
-                                    <></>
-                                )}
+
+                        ) : (
+                            <></>
+                        )}
                         {/* Suggestions positioned at top-right for event responses */}
-                       
+
                         <div
                             className={styles.aiBubbleContainer}
                             style={{
@@ -200,14 +217,14 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                             }}
                         >
                             <div
-                                className={hasEvents? '': styles.aiBubble}
+                                className={hasEvents ? '' : styles.aiBubble}
                             >
 
-                                {!hasEvents ?(  <p className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
-                                        {message.text}
-                                    </p>)  : "" }
-                                
-                               
+                                {!hasEvents ? (<p className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
+                                    {message.text}
+                                </p>) : ""}
+
+
 
                                 {/* Display confidence and sources (common footer) */}
                                 {message.confidence !== undefined && false && (
@@ -238,10 +255,10 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                                 )}
                             </div>
 
-                          
+
                             {/* Related suggestions below the answer - for non-event responses */}
                             {!hasEvents && (
-                                <AnswerSuggestions 
+                                <AnswerSuggestions
                                     userQuery={message.userQuery || message.text}
                                     answerText={message.text}
                                     intent={message.intent || 'general'}
