@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website - With NeuraBot AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .intro {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-top: 3px solid #667eea;
+        }
+
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .widget-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            border: 2px dashed #ddd;
+        }
+
+        .widget-section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .widget-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            display: block;
+        }
+
+        .widget-info {
+            padding: 1rem;
+            background: #e8f4f8;
+            border-top: 1px solid #b3e5fc;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #0288d1;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin: 1rem 0;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            iframe {
+                height: 500px;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 My Amazing Website</h1>
+        <p>Featuring intelligent AI support with NeuraBot</p>
+    </header>
+
+    <div class="container">
+        <section class="intro">
+            <h2>Welcome! 👋</h2>
+            <p>
+                This is a sample website demonstrating how to embed the <strong>NeuraBot AI Widget</strong> 
+                using just a simple iframe tag. No complex setup needed!
+            </p>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>🤖 AI-Powered</h3>
+                <p>Get instant answers powered by advanced AI and your knowledge base</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚡ Fast</h3>
+                <p>Response in seconds, no waiting. Real-time conversations</p>
+            </div>
+            <div class="feature-card">
+                <h3>📱 Responsive</h3>
+                <p>Works perfectly on desktop, tablet, and mobile devices</p>
+            </div>
+            <div class="feature-card">
+                <h3>💬 Easy Integration</h3>
+                <p>Just add an iframe tag and you're done. No dependencies</p>
+            </div>
+        </section>
+
+        <section class="widget-section">
+            <h2>Try Our AI Assistant</h2>
+            <p style="text-align: center; margin-bottom: 1rem; color: #666;">
+                👇 Click the floating button below to start chatting!
+            </p>
+
+            <!-- 
+                THIS IS THE MAGIC LINE! 
+                Just one iframe tag is all you need to embed the widget.
+                Change 'http://localhost:3000/widget' to your actual widget URL.
+            -->
+            <div class="widget-container">
+                <iframe 
+                    id="neurabot-widget"
+                    src="http://localhost:3000/widget"
+                    title="NeuraBot AI Assistant">
+                </iframe>
+                <div class="widget-info">
+                    💡 Tip: Look for the floating button in the corner and click it to expand the chat
+                </div>
+            </div>
+
+            <div style="margin-top: 2rem; background: white; padding: 1.5rem; border-radius: 8px;">
+                <h3 style="color: #667eea; margin-bottom: 1rem;">How to Add This to Your Site</h3>
+                <p style="margin-bottom: 1rem;">Just copy and paste this code into your HTML:</p>
+                <div class="code-block">&lt;iframe 
+  src="http://your-neurabot-domain.com/widget"
+  width="100%"
+  height="600px"
+  style="border: none; border-radius: 8px;"
+&gt;&lt;/iframe&gt;</div>
+                <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+                    That's it! The widget will automatically load and be ready to use. 
+                    No JavaScript code needed, no complex configuration. Just one line!
+                </p>
+            </div>
+        </section>
+
+        <section style="background: white; padding: 2rem; border-radius: 8px; margin: 2rem 0; border-left: 4px solid #667eea;">
+            <h2 style="color: #667eea; margin-bottom: 1rem;">Perfect For...</h2>
+            <ul style="list-style-position: inside; color: #666;">
+                <li>✅ Customer support websites</li>
+                <li>✅ Documentation sites</li>
+                <li>✅ Company intranets</li>
+                <li>✅ E-learning platforms</li>
+                <li>✅ Product help centers</li>
+                <li>✅ Knowledge bases</li>
+                <li>✅ Any website that needs AI assistance</li>
+            </ul>
+        </section>
+
+        <section style="background: #f0f7ff; padding: 2rem; border-radius: 8px; margin: 2rem 0;">
+            <h2 style="color: #0288d1; margin-bottom: 1rem;">📊 Getting Started in 3 Steps</h2>
+            <ol style="color: #333; line-height: 1.8;">
+                <li><strong>Get the widget URL:</strong> Ask your admin or service provider for the NeuraBot widget URL</li>
+                <li><strong>Copy the code:</strong> Use the iframe code shown above</li>
+                <li><strong>Paste in your HTML:</strong> Add it anywhere on your page where you want the widget to appear</li>
+            </ol>
+            <p style="margin-top: 1.5rem; color: #666; font-style: italic;">
+                That's literally all there is to it. No build process, no npm install, no webpack config.
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        <h3 style="margin-bottom: 1rem;">Questions?</h3>
+        <p>
+            This demo shows how easy it is to add NeuraBot to your website.
+        </p>
+        <p style="margin-top: 1rem; color: #999; font-size: 0.9rem;">
+            NeuraBot © 2026 - Making AI integration simple
+        </p>
+    </footer>
+
+    <script>
+        // Optional: Monitor widget loading
+        console.log('🚀 NeuraBot Widget loaded on this page');
+        console.log('The widget is embedded in an iframe at: http://localhost:3000/widget');
+        
+        // Listen for widget ready event (optional)
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'NEURABOT_WIDGET_READY') {
+                console.log('✅ Widget is ready!');
+            }
+        });
+
+        // Check backend connection after 2 seconds
+        setTimeout(() => {
+            fetch('http://localhost:8000/docs')
+                .then(() => console.log('✅ Backend API is accessible'))
+                .catch(() => console.warn('⚠️ Backend API may not be accessible. Make sure it\'s running on port 8000'));
+        }, 2000);
+    </script>
+</body>
+</html>

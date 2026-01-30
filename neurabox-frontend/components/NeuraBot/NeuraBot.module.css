@@ -1,0 +1,12 @@
+.neuraBotContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: var(--z-widget);
+    font-family: var(--font-poppins) ;
+}
+
+/* Ensure all text in widget uses Inter */
+.neuraBotContainer * {
+    font-family: inherit;
+}

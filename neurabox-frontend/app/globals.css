@@ -1,0 +1,296 @@
+/* ==================== CSS VARIABLES & DESIGN SYSTEM ==================== */
+/* Theme system using centralized configuration from lib/theme.js */
+/* All colors are defined in theme configuration and applied via CSS variables */
+
+/* ==================== DARK THEME (Default) ==================== */
+
+
+
+
+
+:root,
+[data-theme="dark"] {
+  /* Primary backgrounds - Figma dark theme */
+  --color-bg: #18202A;
+  --color-bg-secondary: #18202A;
+  --color-bg-tertiary: #29303B;
+  --color-bg-hover: rgba(255, 255, 255, 0.08);
+  --color-bg-active: rgba(255, 255, 255, 0.12);
+
+  --color-modal-bg:#0F1729;
+
+
+
+  /* Text colors */
+  --color-text: #FFFFFF;
+  --color-text-secondary: #EEEEEE;
+  --color-text-muted: #9299A6;
+
+  /* Accent colors - from Figma design */
+  --color-accent-blue: #0FA0E3;
+  --color-accent-blue-light: #0FD4FF;
+  --color-accent-purple: #CF44E6;
+  --color-accent-calendar: #A98DFB;
+  --color-accent-location: #F4B400;
+
+  /* Borders */
+  --color-border: rgba(217, 217, 217, 0.25);
+  --color-border-medium: rgba(255, 255, 255, 0.15);
+  --color-border-strong: rgba(255, 255, 255, 0.25);
+
+  /* Card backgrounds */
+  --color-card-bg: #29303B;
+  --color-card-text: #FFFFFF;
+  --color-card-text-secondary: #9299A6;
+  --color-card-border: rgba(217, 217, 217, 0.25);
+  --color-card-shadow: 0px 0px 50px 10px rgba(0, 0, 0, 0.25);
+
+  /* Chat bubbles */
+  --color-chat-ai-bg: #29303B;
+  --color-chat-ai-text: #FFFFFF;
+  --color-chat-user-bg: rgba(15, 160, 227, 0.25);
+  --color-chat-user-text: #FFFFFF;
+
+  /* Tab buttons */
+  --color-tab-bg: rgba(255, 255, 255, 0.05);
+  --color-tab-text: #9299A6;
+  --color-tab-active-bg: #0FA0E3;
+  --color-tab-active-text: #FFFFFF;
+
+  /* Input */
+  --color-input-bg: transparent;
+  --color-input-border: rgba(255, 255, 255, 0.15);
+  --color-input-placeholder: #9299A6;
+  --color-input-focus: #0FA0E3;
+  --color-input-text: #FFFFFF;
+
+  /* Buttons */
+  --color-button-primary-bg: #0F1729;
+  --color-button-primary-text: #FFFFFF;
+  --color-button-primary-hover: #18202A;
+  --color-button-secondary-bg: rgba(255, 255, 255, 0.1);
+  --color-button-secondary-text: #FFFFFF;
+  --color-button-secondary-border: rgba(255, 255, 255, 0.25);
+
+  /* Title colors */
+  --page-title-colour: #0FA0E3;
+  --color-title-accent: #CF44E6;
+  --color-title-gradient: linear-gradient(90deg, #0FA0E3 0%, #CF44E6 100%);
+
+  /* Shadows */
+  --shadow-modal: 0px 0px 50px 10px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0px 0px 50px 10px rgba(0, 0, 0, 0.25);
+  --shadow-input: 0px -7px 15px rgba(0, 0, 0, 0.1);
+
+  /* Scrollbar */
+  --color-scrollbar: rgba(255, 255, 255, 0.3);
+
+  /* Font */
+  --font-family-ui: var(--font-poppins);
+
+  --suggestion-text:#0FA0E3;
+
+  --color-suggestion-item: #9299A6;
+
+
+  --color-sidebar-bg:#0F1729;
+
+   --color-accent-teal: #cbcbcb;
+
+
+}
+
+/* ==================== LIGHT THEME ==================== */
+[data-theme="light"] {
+
+  --color-suggestion-item:#616161;
+
+  --color-modal-bg:#FFFFFF;
+
+  --color-sidebar-bg:#e4e6eb;
+
+
+
+
+  /* Primary backgrounds */
+  --color-bg: #f5f5f5;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #FFFFFF;
+  --color-bg-hover: rgba(0, 0, 0, 0.05);
+  --color-bg-active: rgba(0, 0, 0, 0.08);
+
+  /* Text colors - Black as specified */
+  --color-text: #353536;
+  --color-text-secondary: #353536;
+  --color-text-muted: #353536;
+
+  /* Accent colors */
+  --color-accent-blue: #0071CD;
+  --color-accent-purple: #A98DF8;
+  --color-accent-purple-hover: #9880E8;
+  --color-accent-purple-dark: #8C7CE0;
+  --color-accent-teal: #00B894;
+  --color-accent-teal-hover: #00D4AA;
+
+  /* Borders */
+  --color-border: #E4E6EB;
+  --color-border-medium: #D9D9D9;
+  --color-border-strong: #BFBFBF;
+
+  /* Card backgrounds */
+  --color-card-bg: #FFFFFF;
+  --color-card-text: #353536;
+  --color-card-text-secondary: #353536;
+  --color-card-border: #E4E6EB;
+  --color-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  /* Chat bubbles */
+  --color-chat-ai-bg: #F5F5F5;
+  --color-chat-ai-text: #353536;
+  --color-chat-user-bg: #F5F3FE;
+  --color-chat-user-text: #353536;
+
+  /* Tab buttons */
+  --color-tab-bg: rgba(0, 0, 0, 0.04);
+  --color-tab-text: #353536;
+  --color-tab-active-bg: #A98DF8;
+  --color-tab-active-text: #ffffff;
+
+  /* Input */
+  --color-input-bg: #FFFFFF;
+  --color-input-border: #D9D9D9;
+  --color-input-placeholder: #BFBFBF;
+  --color-input-focus: #A98DF8;
+  --color-input-text: #353536;
+
+  /* Buttons */
+  --color-button-primary-bg: #0071CD;
+  --color-button-primary-text: #FFFFFF;
+  --color-button-primary-hover: #0057A3;
+  --color-button-secondary-bg: #F3E8FF;
+  --color-button-secondary-text: #A98DF8;
+  --color-button-secondary-border: #E9D5FF;
+
+  /* Title colors */
+  --page-title-colour: #0071CD;
+  --color-title-accent: #A98DF8;
+
+  /* Shadows */
+  --shadow-modal: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  /* Scrollbar */
+  --color-scrollbar: rgba(0, 0, 0, 0.2);
+
+
+  --suggestion-text:#374151;
+}
+
+/* ==================== SHARED TOKENS ==================== */
+:root {
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 100ms ease;
+  --transition-normal: 200ms ease;
+
+  /* Z-index */
+  --z-widget: 9999;
+  --z-modal: 10000;
+
+  --font-xs:10px;
+  --font-sm:12px;
+  --font-md:14px;
+  --font-lg:16px;
+  --font-xl:18px;
+  --font-xxl:22px;
+  
+}
+
+/* ==================== RESET & BASE ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+body {
+  font-family: var(--font-poppins);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* Import Inter font */
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+  }
+
+  40% {
+    transform: scale(1);
+  }
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-scrollbar);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-scrollbar);
+}

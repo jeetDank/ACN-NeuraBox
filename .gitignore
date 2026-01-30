@@ -1,0 +1,63 @@
+# ================================
+# Python
+# ================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+*.sqlite3
+*.db
+
+# Virtual environments
+venv/
+llm_env/
+.env
+.env.*
+!.env.example
+
+# ================================
+# ACN RAG DATA (DO NOT COMMIT)
+# ================================
+acn_data/
+acn/acn_data/
+chroma_db/
+data/
+scraped_data/
+raw/
+logs/
+events.json
+metadata.json
+
+# ================================
+# Model files
+# ================================
+*.bin
+*.pt
+*.pkl
+*.safetensors
+
+# ================================
+# Next.js / Frontend
+# ================================
+neurabox-frontend/node_modules/
+neurabox-frontend/.next/
+neurabox-frontend/out/
+neurabox-frontend/.env.local
+neurabox-frontend/.env.production
+neurabox-frontend/.env
+
+# ================================
+# OS junk
+# ================================
+.DS_Store
+Thumbs.db
+
+# ================================
+# VSCode
+# ================================
+.vscode/
+
+acn_scraper.log
+
+screenshots/

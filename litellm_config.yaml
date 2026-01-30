@@ -1,0 +1,5 @@
+model_list:
+  - model_name: mistral-local
+    litellm_params:
+      model: vllm/mistralai/Mistral-7B-Instruct-v0.1
+      api_base: http://localhost:8001/v1

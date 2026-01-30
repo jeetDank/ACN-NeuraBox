@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website - With ACN NeuraBox Widget</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar h1 {
+            color: #667eea;
+            font-size: 1.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .main-content h2 {
+            color: #1a1a2e;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .main-content p {
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .widget-sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .widget-sidebar h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .widget-label {
+            font-size: 0.85rem;
+            color: #999;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .widget-frame {
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 500px;
+        }
+
+        .widget-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .widget-frame {
+                height: 400px;
+            }
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <h1>🏢 My Company Website</h1>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="content">
+            <!-- Main Content Area -->
+            <div class="main-content">
+                <h2>Welcome to Our Website</h2>
+                
+                <p>
+                    This page demonstrates how easy it is to embed the NeuraBox AI assistant 
+                    directly into your website using an iframe.
+                </p>
+
+                <h3 style="color: #1a1a2e; margin-top: 2rem; margin-bottom: 1rem;">Key Features</h3>
+                <ul style="margin-left: 2rem; color: #666;">
+                    <li>💬 Intelligent chat interface powered by AI</li>
+                    <li>📚 Access to comprehensive knowledge base</li>
+                    <li>🚀 Easy to integrate - just add an iframe</li>
+                    <li>📱 Fully responsive design</li>
+                    <li>🔒 Secure backend integration</li>
+                </ul>
+
+                <h3 style="color: #1a1a2e; margin-top: 2rem; margin-bottom: 1rem;">How It Works</h3>
+                <p>
+                    The NeuraBot widget on the right uses <code>&lt;iframe&gt;</code> to embed 
+                    the chat interface. When visitors click the button, they can ask questions 
+                    and get instant answers powered by your knowledge base.
+                </p>
+
+                <h3 style="color: #1a1a2e; margin-top: 2rem; margin-bottom: 1rem;">Integration Code</h3>
+                <p>To add this widget to your website, simply include this HTML code:</p>
+                
+                <div style="background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 6px; overflow-x: auto; margin: 1rem 0; font-family: 'Courier New', monospace; font-size: 0.9rem;">
+<code>&lt;!-- NeuraBox Widget --&gt;
+&lt;iframe 
+    id="neurabot-widget"
+    src="http://localhost:3000/widget"
+    width="100%"
+    height="600px"
+    frameborder="0"
+    allowfullscreen&gt;
+&lt;/iframe&gt;</code>
+                </div>
+
+                <h3 style="color: #1a1a2e; margin-top: 2rem; margin-bottom: 1rem;">Configuration</h3>
+                <p>
+                    For production, update the iframe <code>src</code> to point to your deployed instance:
+                </p>
+                <ul style="margin-left: 2rem; color: #666;">
+                    <li><strong>Development:</strong> <code>http://localhost:3000/widget</code></li>
+                    <li><strong>Production:</strong> <code>https://yourdomain.com/widget</code></li>
+                </ul>
+
+                <p style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee; color: #999; font-size: 0.9rem;">
+                    The widget communicates with your backend API to provide intelligent responses 
+                    based on your knowledge base.
+                </p>
+            </div>
+
+            <!-- Widget Sidebar -->
+            <div class="widget-sidebar">
+                <h3>❓ Need Help?</h3>
+                <p class="widget-label">Ask NeuraBot →</p>
+                
+                <div class="widget-frame">
+                    <iframe 
+                        id="neurabot-widget"
+                        src="http://localhost:3000/widget"
+                        title="NeuraBox Chat Widget"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: #999; text-align: center;">
+                    ✅ Click the floating button to chat with our AI assistant
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional: PostMessage Communication Example -->
+    <script>
+        // Example: How to communicate with the embedded widget from parent page
+        
+        // Listen for widget ready message
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'NEURABOT_WIDGET_READY') {
+                console.log('NeuraBot widget is ready!');
+                // You can now interact with the widget if needed
+            }
+        });
+
+        // Example: Open chat programmatically
+        function openNeurabotChat() {
+            const widgetFrame = document.getElementById('neurabot-widget');
+            if (widgetFrame && widgetFrame.contentWindow) {
+                widgetFrame.contentWindow.postMessage({
+                    type: 'OPEN_CHAT'
+                }, '*');
+            }
+        }
+
+        // Make function available globally
+        window.openNeurabotChat = openNeurabotChat;
+    </script>
+</body>
+</html>

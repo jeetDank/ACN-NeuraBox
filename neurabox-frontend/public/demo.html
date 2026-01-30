@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuraBot Widget Demo - Easy Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+                sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .code-block {
+            background: #f4f4f4;
+            border-left: 4px solid #667eea;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .instructions {
+            background: #e8f4f8;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            border-left: 4px solid #0288d1;
+        }
+
+        .instructions li {
+            margin: 0.5rem 0;
+            margin-left: 1.5rem;
+        }
+
+        .demo-widget {
+            background: #fafafa;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .demo-info {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        iframe {
+            border: none;
+            border-radius: 8px;
+        }
+
+        .features {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .features li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0f0f0;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .status.ready {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 NeuraBot Widget</h1>
+        <p>Easy Integration Guide - Embed the AI Chat Widget on Any Website</p>
+    </div>
+
+    <div class="container">
+        <!-- Left Column: Instructions -->
+        <div class="section">
+            <h2>How to Integrate</h2>
+            
+            <h3 style="margin-top: 1.5rem; color: #333;">Step 1: Copy the Embed Code</h3>
+            <p>Add this iframe code to your HTML page where you want the widget to appear:</p>
+            
+            <div class="code-block">&lt;iframe 
+  id="neurabot-widget"
+  src="http://localhost:3000/widget"
+  width="100%"
+  height="600px"
+  style="border: none; border-radius: 8px;"&gt;
+&lt;/iframe&gt;</div>
+
+            <h3 style="margin-top: 1.5rem; color: #333;">Step 2: Configuration</h3>
+            <ul class="instructions">
+                <li><strong>src:</strong> Point to your NeuraBot widget URL</li>
+                <li><strong>width:</strong> Adjust as needed (100% fills container)</li>
+                <li><strong>height:</strong> Minimum 600px recommended</li>
+            </ul>
+
+            <h3 style="margin-top: 1.5rem; color: #333;">Step 3: For Production</h3>
+            <div class="code-block">src="https://yourdomain.com/widget"</div>
+
+            <h3 style="margin-top: 1.5rem; color: #333;">Features</h3>
+            <ul class="features">
+                <li>No complex setup required</li>
+                <li>Responsive design</li>
+                <li>Real-time chat with AI</li>
+                <li>Conversation history</li>
+                <li>CORS enabled</li>
+            </ul>
+        </div>
+
+        <!-- Right Column: Live Demo -->
+        <div class="section">
+            <h2>Live Demo</h2>
+            <p style="margin-bottom: 1rem;">The NeuraBot widget is embedded below. Click the floating button to start chatting:</p>
+            
+            <div class="demo-widget">
+                <iframe 
+                    id="neurabot-widget"
+                    src="http://localhost:3000/widget"
+                    width="100%"
+                    height="100%"
+                    style="border-radius: 8px;">
+                </iframe>
+                <div class="demo-info" id="demo-status" style="display: none;">
+                    ⏳ Loading widget... Make sure the NeuraBot backend is running on port 3000
+                </div>
+            </div>
+
+            <div class="status" id="widget-status">
+                ⏳ Checking widget status...
+            </div>
+
+            <h3 style="margin-top: 1.5rem; color: #333;">Minimal Setup</h3>
+            <div class="code-block">&lt;!-- That's literally it! --&gt;
+&lt;iframe src="http://localhost:3000/widget"&gt;&lt;/iframe&gt;</div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 NeuraBot AI Widget. Made for easy integration.</p>
+        <p style="margin-top: 1rem; opacity: 0.8;">Need help? Check the widget logs in your browser console (F12)</p>
+    </footer>
+
+    <script>
+        // Monitor widget status
+        let widgetReady = false;
+
+        // Listen for widget ready message
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'NEURABOT_WIDGET_READY') {
+                widgetReady = true;
+                updateStatus('ready', 'Widget is live and ready! 🎉');
+            }
+        });
+
+        function updateStatus(type, message) {
+            const statusEl = document.getElementById('widget-status');
+            statusEl.className = `status ${type}`;
+            statusEl.textContent = message;
+        }
+
+        // Check widget status after 3 seconds
+        setTimeout(() => {
+            if (!widgetReady) {
+                updateStatus('error', 
+                    '⚠️ Widget not responding. Make sure: ' +
+                    '1) NeuraBot runs on http://localhost:3000 ' +
+                    '2) Backend API runs on http://localhost:8000 ' +
+                    '3) Check browser console for errors'
+                );
+            }
+        }, 3000);
+
+        // Log to console for debugging
+        console.log('%c🤖 NeuraBot Widget Demo', 'font-size: 16px; color: #667eea; font-weight: bold;');
+        console.log('Widget is embedded in an iframe on this page.');
+        console.log('Check the iframe with: document.getElementById("neurabot-widget")');
+    </script>
+</body>
+</html>

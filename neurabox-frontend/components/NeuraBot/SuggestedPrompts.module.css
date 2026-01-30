@@ -1,0 +1,68 @@
+.promptsMenu {
+    position: relative;
+    width: 100%;
+    background: transparent;
+}
+
+.header {
+    padding: 12px 16px 8px;
+}
+
+.headerLabel {
+    color: var(--suggestion-text);
+    font-size: var(--font-xs);
+    font-weight: 400;
+    /* text-transform: uppercase; */
+    letter-spacing: 0.5px;
+}
+
+.promptsList {
+    list-style: none;
+    padding: 0;
+}
+
+.promptItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    color: var(--color-suggestion-item);
+    font-size: var(--font-sm);
+    font-family: var(--font-family-ui);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+   
+}
+
+.promptItem:hover {
+    background: var(--color-bg-hover);
+}
+
+.promptIcon {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+}
+
+.promptText {
+    flex: 1;
+}
+
+.chevron {
+    color: var(--color-text-muted);
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+   margin-left: auto;
+}
+
+.promptItem:hover .chevron {
+    color: var(--color-text);
+    transform: translateX(2px);
+}
+
+.promptItem:hover .promptIcon {
+    color: var(--color-accent-teal);
+}
