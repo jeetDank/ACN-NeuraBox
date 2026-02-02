@@ -3,6 +3,7 @@
 import { Bot, User, Calendar, MapPin, ExternalLink } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
 import AnswerSuggestions from './AnswerSuggestions';
+import ReactMarkdown from 'react-markdown';
 import styles from './ChatMessage.module.css';
 
 /**
@@ -220,9 +221,26 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                                 className={hasEvents ? '' : styles.aiBubble}
                             >
 
-                                {!hasEvents ? (<p className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
-                                    {message.text}
-                                </p>) : ""}
+                                {/* Always show answer text with markdown support */}
+                                <div className={styles.messageText} style={{ whiteSpace: 'pre-wrap', fontSize: '0.95rem', lineHeight: '1.5' }}>
+                                    <ReactMarkdown
+                                        components={{
+                                            h1: ({ node, ...props }) => <h1 style={{ fontSize: '1.3em', fontWeight: 'bold', marginTop: '0.8em', marginBottom: '0.4em', color: themeConfig.chat.ai.text }} {...props} />,
+                                            h2: ({ node, ...props }) => <h2 style={{ fontSize: '1.2em', fontWeight: 'bold', marginTop: '0.7em', marginBottom: '0.3em', color: themeConfig.chat.ai.text }} {...props} />,
+                                            h3: ({ node, ...props }) => <h3 style={{ fontSize: '1.1em', fontWeight: 'bold', marginTop: '0.6em', marginBottom: '0.3em', color: themeConfig.chat.ai.text }} {...props} />,
+                                            strong: ({ node, ...props }) => <strong style={{ fontWeight: 'bold', color: themeConfig.chat.ai.text }} {...props} />,
+                                            em: ({ node, ...props }) => <em style={{ fontStyle: 'italic', color: themeConfig.chat.ai.text }} {...props} />,
+                                            ul: ({ node, ...props }) => <ul style={{ marginLeft: '1.5em', marginTop: '0.3em', marginBottom: '0.3em', listStyle: 'disc' }} {...props} />,
+                                            ol: ({ node, ...props }) => <ol style={{ marginLeft: '1.5em', marginTop: '0.3em', marginBottom: '0.3em', listStyle: 'decimal' }} {...props} />,
+                                            li: ({ node, ...props }) => <li style={{ marginBottom: '0.2em' }} {...props} />,
+                                            a: ({ node, ...props }) => <a style={{ color: themeConfig.accent.purple, textDecoration: 'underline', cursor: 'pointer' }} {...props} />,
+                                            code: ({ node, ...props }) => <code style={{ background: 'rgba(0,0,0,0.1)', padding: '2px 4px', borderRadius: '3px', fontFamily: 'monospace' }} {...props} />,
+                                            blockquote: ({ node, ...props }) => <blockquote style={{ borderLeft: `3px solid ${themeConfig.accent.purple}`, paddingLeft: '1em', marginLeft: '0', marginTop: '0.3em', marginBottom: '0.3em', opacity: 0.8 }} {...props} />,
+                                        }}
+                                    >
+                                        {message.text}
+                                    </ReactMarkdown>
+                                </div>
 
 
 

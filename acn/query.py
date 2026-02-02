@@ -536,7 +536,7 @@ class ACNRAGEngine:
         # Initialize retriever
         self.retriever = ImprovedRetriever(
             chroma_client=self.chroma_client,
-            collection_name="langchain",
+            collection_name="acn_knowledge_base",
             embedding_model=self.embedding_model,
             reranker=self.reranker,
             config=config
