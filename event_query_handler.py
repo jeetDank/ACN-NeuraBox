@@ -31,6 +31,7 @@ class EventQueryResult:
     source_info: str
     confidence: float
     processing_time: float
+    ui: Optional[Dict[str, Any]] = None  # UI-formatted response for frontend
 
 
 class EventQueryClassifier:
@@ -445,6 +446,9 @@ class EventQueryHandler:
         # Build formatted answer
         answer = self._format_event_detail(event)
         
+        # Format UI data for frontend
+        ui_data = self._format_events_for_ui([event])
+        
         confidence = 1.0
         if not event.start_date or not event.city:
             confidence = 0.7
@@ -458,6 +462,7 @@ class EventQueryHandler:
             source_info=f"Source: {event.source_url}",
             confidence=confidence,
             processing_time=0.0,
+            ui=ui_data,
         )
     
     def _handle_list_query(
@@ -495,6 +500,9 @@ class EventQueryHandler:
         # Format answer
         answer = self._format_event_list(events, params)
         
+        # Format UI data for frontend
+        ui_data = self._format_events_for_ui(events) if events else None
+        
         source_info = f"Found {len(events)} events"
         
         if not events:
@@ -509,6 +517,7 @@ class EventQueryHandler:
             source_info=source_info,
             confidence=confidence,
             processing_time=0.0,
+            ui=ui_data,
         )
 
     
@@ -597,6 +606,50 @@ class EventQueryHandler:
                 return f"No ACN events found for {year}."
             else:
                 return "No ACN events found for the specified criteria."
+
+    def _format_events_for_ui(self, events: List[Event]) -> Dict[str, Any]:
+        """
+        Format events for UI rendering as structured cards.
+        Returns data structure suitable for frontend event card rendering.
+        
+        Returns:
+            Dict with 'response_type': 'event_cards' and 'data': {'events': [...]}
+        """
+        ui_events = []
+        for event in events:
+            # Parse start_date into readable format
+            date_str = ""
+            time_str = ""
+            if event.start_date:
+                try:
+                    date_obj = datetime.strptime(event.start_date, "%Y-%m-%d")
+                    # Format: "Jul 10, 2025"
+                    date_str = date_obj.strftime("%b %d, %Y")
+                    # Add time if available (would need to be in event data)
+                    # For now, we'll extract it if in description
+                except:
+                    date_str = event.start_date
+            
+            # Location string
+            location_str = event.location_str
+            
+            ui_events.append({
+                "id": event.event_id,
+                "title": event.title,
+                "date": date_str,
+                "time": time_str,
+                "location": location_str,
+                "description": event.description[:150] + "..." if event.description and len(event.description) > 150 else event.description,
+                "registration_url": event.registration_url or "https://www.appliedclientnetwork.org/events",
+                "event_type": event.event_type.value if hasattr(event.event_type, 'value') else str(event.event_type),
+            })
+        
+        return {
+            "response_type": "event_cards",
+            "data": {
+                "events": ui_events
+            }
+        }
         
         # Build the answer
         lines = []

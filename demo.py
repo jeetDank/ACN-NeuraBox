@@ -1,4 +1,5 @@
 import torch
+import asyncio
 from fastapi import FastAPI
 from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -7,16 +8,17 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 MODEL_PATH = "/home/ubuntu/.cache/huggingface/hub/models--mistralai--Mistral-7B-Instruct-v0.2/snapshots/63a8b081895390a26e140280378bc85ec8bce07a"
 
 SYSTEM_PROMPT = (
-    "You are a helpful AI assistant specialized in machine learning, "
-    "deep learning, and reasoning tasks. Answer clearly and correctly."
+    "You are a helpful AI assistant. "
+    "Answer clearly, concisely, and based only on the given context."
 )
 
-# Load tokenizer & model (offline)
+# Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(
     MODEL_PATH,
     local_files_only=True
 )
 
+# Load model
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
     device_map="auto",
@@ -24,36 +26,47 @@ model = AutoModelForCausalLM.from_pretrained(
     local_files_only=True
 )
 
-app = FastAPI(title="Local Mistral LLM API")
+model.eval()  # 🔥 IMPORTANT
+
+# Optional compile (PyTorch 2.x)
+if torch.__version__.startswith("2"):
+    model = torch.compile(model)
+
+app = FastAPI(title="Optimized Local Mistral LLM API")
+
+# 🔥 Serialize requests (VERY IMPORTANT)
+semaphore = asyncio.Semaphore(1)
 
 class Request(BaseModel):
     prompt: str
     max_tokens: int = 300
-    temperature: float = 0.7
 
 @app.post("/generate")
-def generate(req: Request):
-    # Build final prompt
-    full_prompt = f"{SYSTEM_PROMPT}\n\nUser: {req.prompt}\nAssistant:"
+async def generate(req: Request):
+    async with semaphore:
+        # Hard limits (speed protection)
+        max_new_tokens = min(req.max_tokens, 400)
 
-    inputs = tokenizer(
-        full_prompt,
-        return_tensors="pt",
-        truncation=True
-    ).to(model.device)
+        full_prompt = f"{SYSTEM_PROMPT}\n\nUser: {req.prompt}\nAssistant:"
 
-    with torch.no_grad():
-        outputs = model.generate(
-            **inputs,
-            max_new_tokens=req.max_tokens,
-            temperature=req.temperature,
-            do_sample=True,
-            pad_token_id=tokenizer.eos_token_id
-        )
+        inputs = tokenizer(
+            full_prompt,
+            return_tensors="pt",
+            truncation=True,
+            max_length=2048  # 🔥 CRITICAL
+        ).to(model.device)
 
-    decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False,          # 🔥 deterministic & faster
+                temperature=0.0,
+                pad_token_id=tokenizer.eos_token_id,
+                use_cache=True            # 🔥 speed-up
+            )
 
-    # Remove prompt echo
-    response = decoded.split("Assistant:")[-1].strip()
+        decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        response = decoded.split("Assistant:")[-1].strip()
 
-    return {"response": response}
+        return {"response": response}

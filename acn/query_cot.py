@@ -507,7 +507,7 @@ class ACNRAGEngine:
         # Event handling
         print("📅 Loading event store...")
         self.event_store = EventStore()
-        self.event_store._load_events()
+        self.event_store.load_events()
         
         self.event_classifier = EventQueryClassifier()
         self.event_handler = EventQueryHandler(self.event_store)

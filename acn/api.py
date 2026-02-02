@@ -16,6 +16,7 @@ import re
 # FIXED IMPORT - Use NEW engine
 from query import ACNRAGEngine
 from config import RAGConfig
+from response_adapter import adapt_llm_response
 
 # Setup logging
 logging.basicConfig(
@@ -85,6 +86,7 @@ class QueryRequest(BaseModel):
 
 
 class QueryResponse(BaseModel):
+    ui: Dict
     answer: str
     confidence: float = Field(..., ge=0.0, le=1.0)
     sources: List[str]
@@ -95,6 +97,10 @@ class QueryResponse(BaseModel):
     class Config:
         schema_extra = {
             "example": {
+                "ui": {
+                    "response_type": "rich_message",
+                    "data": {"blocks": []}
+                },
                 "answer": "ACN membership benefits include...",
                 "confidence": 0.85,
                 "sources": ["https://..."],
@@ -292,281 +298,31 @@ async def query_acn(request: QueryRequest):
     logger.info(f"Query #{query_count}: {question[:100]}")
     
     try:
-        # Check query type
-        question_lower = question.lower()
-        
-        # ==================== HARDCODED QUERY: What is ACN ====================
-        is_what_is_acn = any(phrase in question_lower for phrase in [
-            'what is acn', 'what\'s acn', 'about acn', 'tell me about acn', 
-            'explain acn', 'acn overview', 'how to join acn', 'join acn'
-        ])
-        
-        if is_what_is_acn:
-            hardcoded_answer = """ How to Join ACN (Step-by-Step)
-
- 1️⃣ Go to the Official Website
- [https://www.appliedclientnetwork.org](https://www.appliedclientnetwork.org)
-
- 2️⃣ Click Join / Become a Member
-You'll usually find:
-- Join ACN
-- Membership
-- Become a Member
-
- 3️⃣ Choose the Right Membership Type
-ACN offers different plans:
-- Agency / Organization Membership (most common)
-- Individual Membership
-- Student Membership (if available)
-- Vendor / Partner Membership
-
- 4️⃣ Fill Out the Application Form
-You'll be asked for:
-- Name
-- Email
-- Company / College
-- Role (Student / Developer / Analyst / Insurance Professional)
-- Country
-
- 5️⃣ Pay Membership Fee (If Required)
-- Some memberships are paid
-- Student memberships are sometimes free or discounted
-
- 6️⃣ Approval & Confirmation
-Once approved, you get access to:
-- ACN resources
-- Events & webinars
-- Community forums
-- Tools & integrations knowledge"""
-
-            response = {
-                "answer": hardcoded_answer,
-                "confidence": 0.98,
-                "sources": ["https://www.appliedclientnetwork.org"],
-                "intent": "membership",
-                "num_docs": 1,
-                "processing_time": 0.1,
-                "suggestions": [
-                    {"id": "sugg_0", "text": "How do I become a member at ACN?", "icon": "Users"},
-                    {"id": "sugg_1", "text": "What are the membership benefits at ACN?", "icon": "Award"}
-                ]
-            }
-            logger.info(f"Query #{query_count} - What is ACN hardcoded response")
-            return response
-        
-        # ==================== HARDCODED QUERY: How to become a member ====================
-        is_become_member = any(phrase in question_lower for phrase in [
-            'become a member', 'become member', 'how to become member', 
-            'membership types', 'join as member', 'apply for membership',
-            'how do i become a member'
-        ])
-        
-        if is_become_member:
-            hardcoded_answer = """ How to Become a Member
-
- 1️⃣ Visit the ACN Membership Page
-Go to the Membership → Join/Renew section on the ACN website:
- [Join ACN (membership page)](https://www.appliedclientnetwork.org/membership)
-
- 2️⃣ Choose the Correct Membership Type
-ACN offers several categories:
-
-  Advantage Membership
-- For agencies and brokerages using Applied Systems products
-- Covers your entire office location (not just individuals)
-
-  Enterprise Membership
-- For larger organizations with 125+ licenses
-- Requires contacting ACN directly (email) for a custom package
-
-  EZLynx Membership
-- For EZLynx software users
-- Requires contacting ACN for details or enrollment
-
-  Associate Membership
-- For consultants, carriers, technology providers, vendors, etc.
-- Gives access to forums, networking, directory listing, and more
-
- 3️⃣ Fill Out the Application
-For most membership types, you'll either:
-- Complete an online join form
-- OR email ACN for specific membership types (like Enterprise or EZLynx)
-
- The contact email for questions or custom membership info is: info@appliedclientnetwork.org
-
- 4️⃣ Pay the Membership Fee (If Applicable)
-- Agency/Advantage memberships typically include a fee (varies by region/size)
-- Associate/consultant or specialized memberships may also have pricing
-- The ACN team will send payment instructions after your form or inquiry.
-
- 5️⃣ Get Access
-Once approved and paid (if needed):
-- Your organization gets access to ACN resources, forums, and member benefits.
-- Your users can participate in events like Applied Net and ACN Alliance meetups."""
-
-            response = {
-                "answer": hardcoded_answer,
-                "confidence": 0.98,
-                "sources": ["https://www.appliedclientnetwork.org/membership"],
-                "intent": "membership",
-                "num_docs": 1,
-                "processing_time": 0.1,
-                "suggestions": [
-                    {"id": "sugg_0", "text": "What are the membership benefits at ACN?", "icon": "Award"},
-                    {"id": "sugg_1", "text": "What is ACN?", "icon": "HelpCircle"}
-                ]
-            }
-            logger.info(f"Query #{query_count} - How to become a member hardcoded response")
-            return response
-        
-        # ==================== HARDCODED QUERY: Membership benefits ====================
-        is_membership_benefits = any(phrase in question_lower for phrase in [
-            'membership benefits', 'benefits of membership', 'what benefits',
-            'member benefits', 'acn benefits', 'why join acn', 'member perks',
-            'what are the membership benefits'
-        ])
-        
-        if is_membership_benefits:
-            hardcoded_answer = """## Membership Benefits
-
-1. Peer-to-Peer Networking
-Connect with other insurance professionals who use Applied products to share insights, tips, and best practices. ACN members can participate in forums, alliances, and community discussions to solve problems and discover new workflows.
-
-2. Education & Training Resources
-Members get access to:
-- On-demand educational content created by users and experts
-- Webinars and workshops tailored to different roles (e.g., CSR, IT, operations)
-- Practical guidance focused on improving how you use Applied software in your agency or brokerage.
-
-3. Discounts on Applied Net Conference
-ACN members qualify for reduced pricing on registration for Applied Net — the annual flagship conference with hundreds of sessions, networking, and industry insights.
-
-4. Access to Member Alliances
-Join persona-specific alliance groups (e.g., operations, sales, IT) to connect with peers in similar roles and get targeted education and discussions.
-
-5. Member Directory & Job Board
-Members can use the ACN directory to find other agencies, professionals, or resources. A job board helps members explore opportunities in the industry.
-
-6. Events & Summits
-Beyond the big Applied Net conference, ACN hosts regional summits and local events where members can learn and network more intimately with peers.
-
-7. Industry Advocacy & Product Influence
-ACN gives members a voice to share feedback on Applied Systems products — helping shape improvements and product direction with real user input.
-
-8. Publications & Insights
-Members receive Connections — ACN's online publication and newsletter with industry trends, updates, and best practices."""
-
-            response = {
-                "answer": hardcoded_answer,
-                "confidence": 0.98,
-                "sources": ["https://www.appliedclientnetwork.org/membership/benefits"],
-                "intent": "membership",
-                "num_docs": 1,
-                "processing_time": 0.1,
-                "suggestions": [
-                    {"id": "sugg_0", "text": "How do I become a member at ACN?", "icon": "Users"},
-                    {"id": "sugg_1", "text": "Show me upcoming events", "icon": "Calendar"}
-                ]
-            }
-            logger.info(f"Query #{query_count} - Membership benefits hardcoded response")
-            return response
-        
-        # ==================== Check if this is an events query ====================
-        is_events_query = any(keyword in question_lower for keyword in [
-            'event', 'summit', 'conference', 'webinar', 'upcoming', 'schedule', 
-            'applied net', 'ama session', 'roundtable', 'show me events'
-        ])
-        
-        # If events query, fetch and format event cards
-        if is_events_query:
-            try:
-                # Demo upcoming events (since most JSON events are in the past)
-                demo_events = [
-                    {
-                        "title": "Applied Net 2026",
-                        "start_date": "2026-09-27",
-                        "time": "9:00am",
-                        "location": "Gaylord National Resort, Washington, DC",
-                        "url": "https://www.appliedclientnetwork.org/events/applied-net-2026"
-                    },
-                    {
-                        "title": "ACN Summit – Dallas",
-                        "start_date": "2026-02-25",
-                        "time": "9:00am",
-                        "location": "Dallas, Texas, USA",
-                        "url": "https://www.appliedclientnetwork.org/events/acn-summit-dallas-2026"
-                    },
-                    {
-                        "title": "ACN Summit – Calgary",
-                        "start_date": "2026-06-03",
-                        "time": "9:00am",
-                        "location": "Calgary, Alberta, Canada",
-                        "url": "https://www.appliedclientnetwork.org/events/acn-summit-calgary-2026"
-                    },
-                    {
-                        "title": "ACN Webinar – Applied Epic Power User AMA",
-                        "start_date": "2026-02-10",
-                        "time": "1:00pm",
-                        "location": "Virtual (Online)",
-                        "url": "https://www.appliedclientnetwork.org/events/applied-epic-power-user-ama"
-                    }
-                ]
-                
-                # Sort by date
-                demo_events.sort(key=lambda e: e.get('start_date', '2099-12-31'))
-                
-                # Format each event in the exact format the frontend parser expects
-                formatted_answer = ""
-                for idx, event in enumerate(demo_events, 1):
-                    title = event.get('title', 'Untitled Event')
-                    start_date = event.get('start_date', 'Date TBA')
-                    time_str = event.get('time', '')
-                    location = event.get('location', 'Online/TBA')
-                    url = event.get('url', '')
-                    
-                    # Format: "1. **Title**" on its own line
-                    formatted_answer += f"{idx}. **{title}**\n"
-                    # Then Date: on next line
-                    formatted_answer += f"Date: {start_date}\n"
-                    # Then Time: if available
-                    if time_str:
-                        formatted_answer += f"Time: {time_str}\n"
-                    # Then Location:
-                    formatted_answer += f"Location: {location}\n"
-                    # Then Learn More link
-                    if url:
-                        formatted_answer += f"Learn More: [{title}]({url})\n"
-                    formatted_answer += "\n"
-                
-                response = {
-                    "answer": formatted_answer,
-                    "confidence": 0.95,
-                    "sources": [],
-                    "intent": "events",
-                    "num_docs": len(demo_events),
-                    "processing_time": 0.1
-                }
-                
-                logger.info(f"Query #{query_count} - Events query, returned {len(demo_events)} events")
-                return response
-            
-            except Exception as e:
-                logger.warning(f"Failed to format events, falling back to RAG: {e}")
-        
-        # Standard RAG query for non-event questions
+        # Standard RAG query for all questions
         start_time = time.time()
         result = rag_engine.query(question, k=request.k)
         processing_time = time.time() - start_time
-        
+
         # Extract intent
         intent_category = (
             result["intent"].category 
             if hasattr(result.get("intent"), "category") 
             else "general"
         )
+
+        # 🔥 Single adapter entry
+        # Check if result already has UI data (from structured query handlers like event queries)
+        if isinstance(result.get("ui"), dict) and result["ui"]:
+            ui_payload = result["ui"]
+        else:
+            ui_payload = adapt_llm_response(
+                answer=result["answer"],
+                intent=intent_category
+            )
         
         # Build response
         response = {
+            "ui": ui_payload,
             "answer": result["answer"],
             "confidence": result.get("confidence", 0.0),
             "sources": result.get("sources", []),

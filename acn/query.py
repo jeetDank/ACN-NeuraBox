@@ -27,6 +27,15 @@ from chromadb.config import Settings
 from config import RAGConfig
 from intelligent_text_fixer import IntelligentTextFixer, fix_text
 
+# Import event query handler (if available)
+try:
+    import sys
+    sys.path.insert(0, '..')
+    from event_query_handler import EventQueryHandler, EventStore
+    HAS_EVENT_HANDLER = True
+except ImportError:
+    HAS_EVENT_HANDLER = False
+
 
 # ==================== TEXT NORMALIZATION ====================
 
@@ -516,6 +525,16 @@ class ACNRAGEngine:
         self.prompt_builder = PromptBuilder()
         self.text_fixer = IntelligentTextFixer()
         
+        # Initialize event handler if available
+        self.event_handler = None
+        if HAS_EVENT_HANDLER:
+            try:
+                event_store = EventStore()
+                self.event_handler = EventQueryHandler(event_store)
+                print("✓ Event query handler loaded")
+            except Exception as e:
+                print(f"⚠ Event query handler not available: {e}")
+        
         print("\n" + "="*80)
         print("✓ ACN RAG Engine Ready!")
         print("✓ Intelligent text fixer loaded")
@@ -526,7 +545,27 @@ class ACNRAGEngine:
         
         start_time = datetime.now()
         
-        # Step 1: Classify query
+        # Step 1: Try event handler first if available
+        if self.event_handler and hasattr(self.event_handler, 'query'):
+            try:
+                event_result = self.event_handler.query(question)
+                # Check if this was an event query with results
+                if event_result.ui and event_result.events:
+                    # Return with UI data for event cards
+                    return {
+                        "answer": event_result.formatted_answer,
+                        "confidence": event_result.confidence,
+                        "sources": [e.source_url for e in event_result.events[:3]],
+                        "intent": QueryIntent(category="events", is_temporal=False),
+                        "num_docs": len(event_result.events),
+                        "processing_time": (datetime.now() - start_time).total_seconds(),
+                        "ui": event_result.ui  # Pass UI data to API
+                    }
+            except Exception as e:
+                print(f"Event handler error: {e}")
+                pass  # Fall through to standard RAG
+        
+        # Step 2: Classify query
         intent = self.classifier.classify(question)
         
         print("="*80)

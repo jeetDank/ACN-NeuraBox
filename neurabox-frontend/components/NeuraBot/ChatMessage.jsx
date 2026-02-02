@@ -98,8 +98,53 @@ export default function ChatMessage({ message, onSuggestionClick }) {
         return events;
     };
 
-    const extractedEvents = !isUser ? extractEventsFromText(message.text) : [];
+    // Use backend UI events if available, otherwise fall back to text parsing
+    const extractedEvents = !isUser 
+        ? (message.ui?.data?.events || extractEventsFromText(message.text))
+        : [];
     const hasEvents = extractedEvents.length > 0;
+
+    // DEBUG: Log when events are detected
+    if (!isUser && message.ui?.response_type === 'event_cards') {
+        console.log('🎫 Event cards detected from backend:', {
+            responseType: message.ui?.response_type,
+            eventCount: message.ui?.data?.events?.length || 0,
+            events: extractedEvents.map(e => ({ title: e.title, date: e.date, location: e.location }))
+        });
+    }
+
+    // Get message text (use backend answer if available)
+    const displayText = message.answer || message.text || '';
+
+    // Render rich message blocks from backend UI
+    const renderRichMessageBlocks = () => {
+        const blocks = message.ui?.data?.blocks;
+        if (!blocks || !Array.isArray(blocks)) return null;
+
+        return (
+            <div className={styles.richMessage}>
+                {blocks.map((block, idx) => {
+                    if (block.type === 'paragraph') {
+                        return (
+                            <p key={idx} className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
+                                {block.text}
+                            </p>
+                        );
+                    }
+                    if (block.type === 'list' && block.items) {
+                        return (
+                            <ul key={idx} className={styles.bulletList}>
+                                {block.items.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                ))}
+                            </ul>
+                        );
+                    }
+                    return null;
+                })}
+            </div>
+        );
+    };
 
     // Render event cards with theme-aware styles
     const renderEventCards = () => {
@@ -108,9 +153,9 @@ export default function ChatMessage({ message, onSuggestionClick }) {
             <>
                 <div className={styles.eventsContainer}>
                     <p className={styles.eventsIntro}>Here are the upcoming events:</p>
-                    {extractedEvents.map((event) => (
+                    {extractedEvents.map((event, idx) => (
                         <div
-                            key={event.id}
+                            key={event.id || idx}
                             className={styles.eventCard}
                             style={{
                                 background: themeConfig.card.bg,
@@ -129,13 +174,15 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                                         {event.time ? ` | ${event.time}` : ''}
                                     </span>
                                 </div>
-                                <div className={styles.eventLocation}>
-                                    <MapPin size={14} />
-                                    <span>{event.location}</span>
-                                </div>
+                                {event.location && (
+                                    <div className={styles.eventLocation}>
+                                        <MapPin size={14} />
+                                        <span>{event.location}</span>
+                                    </div>
+                                )}
                             </div>
                             <a
-                                href={event.url || 'https://www.appliedclientnetwork.org/events'}
+                                href={event.registration_url || event.url || 'https://www.appliedclientnetwork.org/events'}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={styles.eventButton}
@@ -220,9 +267,13 @@ export default function ChatMessage({ message, onSuggestionClick }) {
                                 className={hasEvents ? '' : styles.aiBubble}
                             >
 
-                                {!hasEvents ? (<p className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
-                                    {message.text}
-                                </p>) : ""}
+                                {!hasEvents ? (
+                                    message.ui?.response_type === 'rich_message' 
+                                        ? renderRichMessageBlocks()
+                                        : <p className={styles.messageText} style={{ whiteSpace: 'pre-wrap' }}>
+                                            {displayText}
+                                        </p>
+                                ) : ""}
 
 
 

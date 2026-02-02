@@ -95,10 +95,12 @@ export function useNeuraBot() {
                 id: (Date.now() + 1).toString(),
                 type: 'ai',
                 text: response.answer,
+                answer: response.answer,  // ✅ Include answer field
                 userQuery: text.trim(),
                 intent: response.intent || 'general',
                 confidence: response.confidence,
                 sources: response.sources,
+                ui: response.ui,  // ✅ Include UI structure from backend
                 parsedData: parsed,
                 timestamp: new Date(),
             };

@@ -29,6 +29,8 @@ export async function queryNeuraBot(question, k = 5) {
             answer: data.answer || '',
             confidence: data.confidence || 0,
             sources: data.sources || [],
+            ui: data.ui || null,  // ✅ Include UI structure from backend
+            intent: data.intent || 'general',
         };
     } catch (error) {
         console.error('NeuraBot API error:', error);
