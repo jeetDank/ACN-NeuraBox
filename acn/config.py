@@ -23,6 +23,7 @@ class RAGConfig:
     # ========== EMBEDDING CONFIGURATION ==========
     EMBEDDING_MODEL: str = "BAAI/bge-large-en-v1.5"
     
+    USE_LOCAL_LLM = True   
     # ========== RERANKER CONFIGURATION ==========
     USE_RERANKER: bool = True
     RERANKER_MODEL: str = "cross-encoder/ms-marco-MiniLM-L-12-v2"
